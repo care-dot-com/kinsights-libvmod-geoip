@@ -118,6 +118,26 @@ vmod_region_name(struct sess *sp, struct vmod_priv *pp, const char *ip)
 }
 
 const char *
+vmod_region_code(struct sess *sp, struct vmod_priv *pp, const char *ip) {
+   GeoIPRegion *gir;
+	const char* region = NULL;
+
+	if (!pp->priv) {
+		init_priv(pp);
+	}
+
+	if (ip) {
+		if (gir = GeoIP_region_by_addr((GeoIP *)pp->priv, ip)) {
+			region = gir->region;
+			// TODO: is gir* a local copy or the actual record?
+			GeoIPRegion_delete(gir);
+		}
+	}
+
+	return(WS_Dup(sp->wrk->ws, (region ? region : GI_UNKNOWN_STRING)));
+}
+
+const char *
 vmod_client_region_name(struct sess *sp, struct vmod_priv *pp) {
 	return vmod_region_name(sp, pp, VRT_IP_string(sp, VRT_r_client_ip(sp)));
 }
@@ -125,4 +145,9 @@ vmod_client_region_name(struct sess *sp, struct vmod_priv *pp) {
 const char *
 vmod_ip_region_name(struct sess *sp, struct vmod_priv *pp, struct sockaddr_storage *ip) {
 	return vmod_region_name(sp, pp, VRT_IP_string(sp, ip));
+}
+
+const char *
+vmod_client_region_code(struct sess *sp, struct vmod_priv *pp) {
+   return vmod_region_code(sp, pp, VRT_IP_string(sp, ip));
 }
