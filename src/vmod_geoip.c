@@ -42,7 +42,7 @@ init_priv(struct vmod_priv *pp) {
 }
 
 VCL_STRING
-vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING *ip)
+vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	const char* country = NULL;
 
