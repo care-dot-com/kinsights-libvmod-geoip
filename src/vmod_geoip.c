@@ -63,7 +63,7 @@ vmod_client_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
 }
 
 VCL_STRING
-vmod_ip_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+vmod_ip_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
 	return vmod_country_code(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
@@ -90,7 +90,7 @@ vmod_client_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
 }
 
 VCL_STRING
-vmod_ip_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+vmod_ip_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
 	return vmod_country_name(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
@@ -142,11 +142,11 @@ vmod_client_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
 }
 
 VCL_STRING
-vmod_ip_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+vmod_ip_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
 	return vmod_region_name(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
 VCL_STRING
 vmod_client_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
-   return vmod_region_code(ctx, pp, VRT_IP_string(ctx, ip));
+   return vmod_region_code(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
 }
