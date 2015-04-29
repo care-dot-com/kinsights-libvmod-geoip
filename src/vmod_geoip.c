@@ -7,13 +7,13 @@
  * This code is licensed under a MIT-style License, see file LICENSE
 */
 
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <GeoIP.h>
 
 #include "vrt.h"
 #include "vrt_obj.h"
-#include "bin/varnishd/cache.h"
+#include "cache/cache.h"
 
 #include "vcc_if.h"
 
@@ -41,9 +41,8 @@ init_priv(struct vmod_priv *pp) {
 	}
 }
 
-
-const char *
-vmod_country_code(struct sess *sp, struct vmod_priv *pp, const char *ip)
+VCL_STRING
+vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING *ip)
 {
 	const char* country = NULL;
 
@@ -55,22 +54,22 @@ vmod_country_code(struct sess *sp, struct vmod_priv *pp, const char *ip)
 		country = GeoIP_country_code_by_addr((GeoIP *)pp->priv, ip);
 	}
 
-	return(WS_Dup(sp->wrk->ws, (country ? country : GI_UNKNOWN_STRING)));
+	return(WS_Dup(ctx->ws, (country ? country : GI_UNKNOWN_STRING)));
 }
 
-const char *
-vmod_client_country_code(struct sess *sp, struct vmod_priv *pp) {
-	return vmod_country_code(sp, pp, VRT_IP_string(sp, VRT_r_client_ip(sp)));
+VCL_STRING
+vmod_client_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
+	return vmod_country_code(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
 }
 
-const char *
-vmod_ip_country_code(struct sess *sp, struct vmod_priv *pp, struct sockaddr_storage *ip) {
-	return vmod_country_code(sp, pp, VRT_IP_string(sp, ip));
+VCL_STRING
+vmod_ip_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+	return vmod_country_code(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
 
-const char *
-vmod_country_name(struct sess *sp, struct vmod_priv *pp, const char *ip)
+VCL_STRING
+vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	const char* country = NULL;
 
@@ -82,22 +81,22 @@ vmod_country_name(struct sess *sp, struct vmod_priv *pp, const char *ip)
 		country = GeoIP_country_name_by_addr((GeoIP *)pp->priv, ip);
 	}
 
-	return(WS_Dup(sp->wrk->ws, (country ? country : GI_UNKNOWN_STRING)));
+	return(WS_Dup(ctx->ws, (country ? country : GI_UNKNOWN_STRING)));
 }
 
-const char *
-vmod_client_country_name(struct sess *sp, struct vmod_priv *pp) {
-	return vmod_country_name(sp, pp, VRT_IP_string(sp, VRT_r_client_ip(sp)));
+VCL_STRING
+vmod_client_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
+	return vmod_country_name(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
 }
 
-const char *
-vmod_ip_country_name(struct sess *sp, struct vmod_priv *pp, struct sockaddr_storage *ip) {
-	return vmod_country_name(sp, pp, VRT_IP_string(sp, ip));
+VCL_STRING
+vmod_ip_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+	return vmod_country_name(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
 
-const char *
-vmod_region_name(struct sess *sp, struct vmod_priv *pp, const char *ip)
+VCL_STRING
+vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRegion *gir;
 	const char* region = NULL;
@@ -114,11 +113,11 @@ vmod_region_name(struct sess *sp, struct vmod_priv *pp, const char *ip)
 		}
 	}
 
-	return(WS_Dup(sp->wrk->ws, (region ? region : GI_UNKNOWN_STRING)));
+	return(WS_Dup(ctx->ws, (region ? region : GI_UNKNOWN_STRING)));
 }
 
-const char *
-vmod_region_code(struct sess *sp, struct vmod_priv *pp, const char *ip) {
+VCL_STRING
+vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip) {
    GeoIPRegion *gir;
 	const char* region = NULL;
 
@@ -134,20 +133,20 @@ vmod_region_code(struct sess *sp, struct vmod_priv *pp, const char *ip) {
 		}
 	}
 
-	return(WS_Dup(sp->wrk->ws, (region ? region : GI_UNKNOWN_STRING)));
+	return(WS_Dup(ctx->ws, (region ? region : GI_UNKNOWN_STRING)));
 }
 
-const char *
-vmod_client_region_name(struct sess *sp, struct vmod_priv *pp) {
-	return vmod_region_name(sp, pp, VRT_IP_string(sp, VRT_r_client_ip(sp)));
+VCL_STRING
+vmod_client_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
+	return vmod_region_name(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
 }
 
-const char *
-vmod_ip_region_name(struct sess *sp, struct vmod_priv *pp, struct sockaddr_storage *ip) {
-	return vmod_region_name(sp, pp, VRT_IP_string(sp, ip));
+VCL_STRING
+vmod_ip_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, struct sockaddr_storage *ip) {
+	return vmod_region_name(ctx, pp, VRT_IP_string(ctx, ip));
 }
 
-const char *
-vmod_client_region_code(struct sess *sp, struct vmod_priv *pp) {
-   return vmod_region_code(sp, pp, VRT_IP_string(sp, ip));
+VCL_STRING
+vmod_client_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
+   return vmod_region_code(ctx, pp, VRT_IP_string(ctx, ip));
 }
