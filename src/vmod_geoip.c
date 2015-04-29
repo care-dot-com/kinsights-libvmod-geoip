@@ -68,50 +68,69 @@ vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip
 }
 
 VCL_STRING
-vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 	return WS_Copy(ctx->ws, _mk_Unknown(gir->region), strlen (_mk_Unknown(gir->region)));
 }
 
 VCL_STRING
-vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(GeoIP_region_name_by_code(gir->country_code, gir->region)), strlen (_mk_Unknown(gir->country_code)));
+	VCL_STRING name;
+
+	name = GeoIP_region_name_by_code(gir->country_code, gir->region);
+
+	return WS_Copy(ctx->ws, _mk_Unknown(name), strlen (_mk_Unknown(name)));
 }
 
 VCL_STRING
-vmod_client_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
-	return vmod_country_code(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
+vmod_city(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+{
+	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
+	return WS_Copy(ctx->ws, _mk_Unknown(gir->city), strlen (_mk_Unknown(gir->city)));
 }
 
 VCL_STRING
-vmod_ip_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
-	return vmod_country_code(ctx, pp, VRT_IP_string(ctx, ip));
+vmod_postal_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+{
+	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
+	return WS_Copy(ctx->ws, _mk_Unknown(gir->postal_code), strlen (_mk_Unknown(gir->postal_code)));
 }
 
 VCL_STRING
-vmod_client_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
-	return vmod_country_name(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
+vmod_longitude(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+{
+	char output[50];
+	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
+
+	snprintf(output, 50, "%f", gir->longitude);
+	return WS_Copy(ctx->ws, output, strlen (output));
 }
 
 VCL_STRING
-vmod_ip_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
-	return vmod_country_name(ctx, pp, VRT_IP_string(ctx, ip));
+vmod_latitude(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+{
+	char output[50];
+	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
+
+	snprintf(output, 50, "%f", gir->latitude);
+	return WS_Copy(ctx->ws, output, strlen (output));
 }
 
-VCL_STRING
-vmod_client_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
-	return vmod_region_name(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
-}
+// VCL_VOID
+// geocode(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
+// {
+// 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 
-VCL_STRING
-vmod_ip_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip) {
-	return vmod_region_name(ctx, pp, VRT_IP_string(ctx, ip));
-}
-
-VCL_STRING
-vmod_client_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp) {
-	return vmod_region_code(ctx, pp, VRT_IP_string(ctx, VRT_r_client_ip(ctx)));
-}
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-City:", _mk_Unknown(gir->city), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\015X-Geo-Region-Code:", _mk_Unknown(gir->region), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\013X-Geo-Postal-Code:", _mk_Unknown(gir->postal_code), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\013X-Geo-Latitude:", _mk_Unknown(gir->latitude), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-Longitude:", _mk_Unknown(gir->longitude), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-IP-Address:", _mk_Unknown(ip), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-Region-Name:", _mk_Unknown(ip), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-Country-Code:", _mk_Unknown(gir->country_code), vrt_magic_string_end);
+//     VRT_SetHdr(ctx, HDR_RESP, "\014X-Geo-Country-Name:", _mk_Unknown(gir->country_name), vrt_magic_string_end);
+// }
