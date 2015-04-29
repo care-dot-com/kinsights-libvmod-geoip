@@ -44,7 +44,8 @@ init_priv(struct vmod_priv *pp) {
 VCL_STRING
 vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
-	const char* country = NULL;
+	const char* data = NULL;
+	const int* data_len = 0;
 
 	if (!pp->priv) {
 		init_priv(pp);
@@ -73,7 +74,8 @@ vmod_ip_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_IP ip)
 VCL_STRING
 vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
-	const char* country = NULL;
+	const char* data = NULL;
+	const int* data_len = 0;
 
 	if (!pp->priv) {
 		init_priv(pp);
@@ -104,7 +106,8 @@ VCL_STRING
 vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRegion *gir;
-	const char* region = NULL;
+	const char* data = NULL;
+	const int* data_len = 0;
 
 	if (!pp->priv) {
 		init_priv(pp);
@@ -127,7 +130,8 @@ vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 VCL_STRING
 vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip) {
    GeoIPRegion *gir;
-	const char* region = NULL;
+	const char* data = NULL;
+	const int* data_len = 0;
 
 	if (!pp->priv) {
 		init_priv(pp);
