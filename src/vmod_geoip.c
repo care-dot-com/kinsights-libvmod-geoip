@@ -53,8 +53,8 @@ vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip
 	if (ip) {
 		data = GeoIP_country_code_by_addr((GeoIP *)pp->priv, ip);
 	}
-	data = data ? data : GI_UNKNOWN_STRING
-	data_len = strlen (data)
+	data = data ? data : GI_UNKNOWN_STRING;
+	data_len = strlen (data);
 
 	return WS_Copy(ctx->ws, data, data_len);
 }
@@ -83,8 +83,8 @@ vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip
 		data = GeoIP_country_name_by_addr((GeoIP *)pp->priv, ip);
 	}
 
-	data = data ? data : GI_UNKNOWN_STRING
-	data_len = strlen (data)
+	data = data ? data : GI_UNKNOWN_STRING;
+	data_len = strlen (data);
 
 	return WS_Copy(ctx->ws, data, data_len);
 }
@@ -118,8 +118,8 @@ vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 		}
 	}
 
-	data = data ? data : GI_UNKNOWN_STRING
-	data_len = strlen (data)
+	data = data ? data : GI_UNKNOWN_STRING;
+	data_len = strlen (data);
 
 	return WS_Copy(ctx->ws, data, data_len);
 }
@@ -141,8 +141,8 @@ vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 		}
 	}
 
-	data = data ? data : GI_UNKNOWN_STRING
-	data_len = strlen (data)
+	data = data ? data : GI_UNKNOWN_STRING;
+	data_len = strlen (data);
 
 	return WS_Copy(ctx->ws, data, data_len);
 }
