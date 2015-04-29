@@ -51,10 +51,12 @@ vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip
 	}
 
 	if (ip) {
-		country = GeoIP_country_code_by_addr((GeoIP *)pp->priv, ip);
+		data = GeoIP_country_code_by_addr((GeoIP *)pp->priv, ip);
 	}
+	data = data ? data : GI_UNKNOWN_STRING
+	data_len = strlen (data)
 
-	return(WS_Dup(ctx->ws, (country ? country : GI_UNKNOWN_STRING)));
+	return WS_Copy(ctx->ws, data, data_len);
 }
 
 VCL_STRING
@@ -78,10 +80,13 @@ vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip
 	}
 
 	if (ip) {
-		country = GeoIP_country_name_by_addr((GeoIP *)pp->priv, ip);
+		data = GeoIP_country_name_by_addr((GeoIP *)pp->priv, ip);
 	}
 
-	return(WS_Dup(ctx->ws, (country ? country : GI_UNKNOWN_STRING)));
+	data = data ? data : GI_UNKNOWN_STRING
+	data_len = strlen (data)
+
+	return WS_Copy(ctx->ws, data, data_len);
 }
 
 VCL_STRING
@@ -107,13 +112,16 @@ vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 
 	if (ip) {
 		if (gir = GeoIP_region_by_addr((GeoIP *)pp->priv, ip)) {
-			region = GeoIP_region_name_by_code(gir->country_code, gir->region);
+			data = GeoIP_region_name_by_code(gir->country_code, gir->region);
 			// TODO: is gir* a local copy or the actual record?
 			GeoIPRegion_delete(gir);
 		}
 	}
 
-	return(WS_Dup(ctx->ws, (region ? region : GI_UNKNOWN_STRING)));
+	data = data ? data : GI_UNKNOWN_STRING
+	data_len = strlen (data)
+
+	return WS_Copy(ctx->ws, data, data_len);
 }
 
 VCL_STRING
@@ -127,13 +135,16 @@ vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 
 	if (ip) {
 		if (gir = GeoIP_region_by_addr((GeoIP *)pp->priv, ip)) {
-			region = gir->region;
+			data = gir->region;
 			// TODO: is gir* a local copy or the actual record?
 			GeoIPRegion_delete(gir);
 		}
 	}
 
-	return(WS_Dup(ctx->ws, (region ? region : GI_UNKNOWN_STRING)));
+	data = data ? data : GI_UNKNOWN_STRING
+	data_len = strlen (data)
+
+	return WS_Copy(ctx->ws, data, data_len);
 }
 
 VCL_STRING
