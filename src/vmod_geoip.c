@@ -57,21 +57,30 @@ VCL_STRING
 vmod_country_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(gir->country_code), strlen (_mk_Unknown(gir->country_code)));
+	if (gir != NULL) {
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->country_code), strlen (_mk_Unknown(gir->country_code)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
 vmod_country_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(gir->country_name), strlen (_mk_Unknown(gir->country_name)));
+	if (gir != NULL) {
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->country_name), strlen (_mk_Unknown(gir->country_name)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
 vmod_region_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(gir->region), strlen (_mk_Unknown(gir->region)));
+	if (gir != NULL) {
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->region), strlen (_mk_Unknown(gir->region)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
@@ -80,23 +89,31 @@ vmod_region_name(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 	VCL_STRING name;
 
-	name = GeoIP_region_name_by_code(gir->country_code, gir->region);
-
-	return WS_Copy(ctx->ws, _mk_Unknown(name), strlen (_mk_Unknown(name)));
+	if (gir != NULL) {
+		name = GeoIP_region_name_by_code(gir->country_code, gir->region);
+		return WS_Copy(ctx->ws, _mk_Unknown(name), strlen (_mk_Unknown(name)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
 vmod_city(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(gir->city), strlen (_mk_Unknown(gir->city)));
+	if (gir != NULL) {
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->city), strlen (_mk_Unknown(gir->city)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
 vmod_postal_code(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
-	return WS_Copy(ctx->ws, _mk_Unknown(gir->postal_code), strlen (_mk_Unknown(gir->postal_code)));
+	if (gir != NULL) {
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->postal_code), strlen (_mk_Unknown(gir->postal_code)));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
@@ -105,8 +122,11 @@ vmod_longitude(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 	char output[50];
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 
-	snprintf(output, 50, "%f", gir->longitude);
-	return WS_Copy(ctx->ws, output, strlen (output));
+	if (gir != NULL) {
+		snprintf(output, 50, "%f", gir->longitude);
+		return WS_Copy(ctx->ws, output, strlen (output));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 VCL_STRING
@@ -115,8 +135,11 @@ vmod_latitude(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 	char output[50];
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 
-	snprintf(output, 50, "%f", gir->latitude);
-	return WS_Copy(ctx->ws, output, strlen (output));
+	if (gir != NULL) {
+		snprintf(output, 50, "%f", gir->latitude);
+		return WS_Copy(ctx->ws, output, strlen (output));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
 
 // VCL_VOID
