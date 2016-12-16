@@ -3,7 +3,7 @@
  * GeoIP API: http://www.maxmind.com/app/c
  *
  * See file README.rst for usage instructions
- * 
+ *
  * This code is licensed under a MIT-style License, see file LICENSE
 */
 
@@ -138,6 +138,16 @@ vmod_latitude(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 	if (gir != NULL) {
 		snprintf(output, 50, "%f", gir->latitude);
 		return WS_Copy(ctx->ws, output, strlen (output));
+	}
+	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
+}
+
+VCL_STRING
+vmod_timezone(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING cc, VCL_STRING rc)
+{
+	const char *tz = GeoIP_time_zone_by_country_and_region(cc, rc);
+	if (tz != NULL) {
+		return WS_Copy(ctx->ws, tz, strlen (tz));
 	}
 	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
