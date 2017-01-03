@@ -101,7 +101,7 @@ vmod_city(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING ip)
 {
 	GeoIPRecord *gir = vmod_geoip_record(ctx, pp, ip);
 	if (gir != NULL) {
-		return WS_Copy(ctx->ws, _mk_Unknown(gir->city), strlen (_mk_Unknown(gir->city)));
+		return WS_Copy(ctx->ws, _mk_Unknown(gir->city), -1);
 	}
 	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
@@ -147,7 +147,7 @@ vmod_timezone(const struct vrt_ctx *ctx, struct vmod_priv *pp, VCL_STRING cc, VC
 {
 	const char *tz = GeoIP_time_zone_by_country_and_region(cc, rc);
 	if (tz != NULL) {
-		return WS_Copy(ctx->ws, tz, strlen (tz));
+		return WS_Copy(ctx->ws, _mk_Unknown(tz), -1);
 	}
 	return WS_Copy(ctx->ws, "Unknown", strlen ("Unknown"));
 }
